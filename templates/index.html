@@ -11,7 +11,7 @@
   </head>
   <body>
     <h1>Smart Notes Organizer</h1>
-    <form action="/add_note" method="post">
+    <form id="add-note-form" action="/add_note" method="post">
       <input type="text" name="title" placeholder="Title" required />
       <textarea
         id="content"
@@ -41,6 +41,26 @@
       </div>
       <div id="summary" class="summary"></div>
     </form>
+
+    <form
+      class="search-form"
+      id="search-form"
+      action="{{ url_for('index') }}"
+      method="post"
+    >
+      <input
+        type="text"
+        name="query"
+        placeholder="Search notes..."
+        value="{{ query }}"
+      />
+      <div class="button-container-right">
+        <button class="link" type="button" onclick="resetSearch()">
+          Reset
+        </button>
+        <button type="submit">Search</button>
+      </div>
+    </form>
     <ul>
       {% for note in notes %}
       <li>
@@ -62,7 +82,7 @@
             >Delete</a
           >
 
-          <a class="link" href="{{ url_for('view_note', note_id=note[0]) }}"
+          <a href="{{ url_for('view_note', note_id=note[0]) }}"
             >Show full details</a
           >
         </div>

@@ -24,6 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function resetSearch() {
+    document.querySelector('input[name="query"]').value = "";
+    document.getElementById("search-form").submit();
+  }
+
   function toggleButtonState() {
     const title = titleInput.value.trim();
     const content = contentInput.value.trim();
@@ -115,6 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
   window.summarizeNote = summarizeNote;
   window.analyzeSentiment = analyzeSentiment;
   window.categorizeNote = categorizeNote;
+  window.resetSearch = resetSearch;
 
   // Attach event listeners to input fields
   titleInput.addEventListener("input", toggleButtonState);

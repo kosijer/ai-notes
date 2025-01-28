@@ -36,14 +36,26 @@ def init_db():
 
 init_db()
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
+    query = request.form.get('query', '').strip()
     conn = sqlite3.connect('notes.db')
     c = conn.cursor()
-    c.execute("SELECT * FROM notes")
+    if query:
+        c.execute('''
+            SELECT * FROM notes WHERE
+            title LIKE ? OR
+            content LIKE ? OR
+            category LIKE ? OR
+            sentiment LIKE ? OR
+            summary LIKE ?
+        ''', ('%' + query + '%',) * 5)
+    else:
+        c.execute("SELECT * FROM notes")
     notes = c.fetchall()
     conn.close()
-    return render_template('index.html', notes=notes)
+    return render_template('index.html', notes=notes, query=query)
+
 
 @app.route('/add_note', methods=['POST'])
 def add_note():

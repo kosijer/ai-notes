@@ -68,8 +68,8 @@ button:disabled {
 button.link,
 a.link {
   color: #333;
-  background-color: white;
-  margin-left: 5px;
+  background: none;
+  margin-left: -5px;
 }
 
 button.link:hover,
@@ -161,4 +161,12 @@ span.category {
   -webkit-line-clamp: 4;
   line-clamp: 4;
   -webkit-box-orient: vertical;
+}
+
+.search-form {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  background: none;
+  box-shadow: none;
 }
