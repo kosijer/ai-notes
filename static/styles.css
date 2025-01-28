@@ -94,9 +94,16 @@ li {
 
 .summary {
   margin-top: 10px;
-  padding: 10px;
   background-color: #e9ecef;
   border-radius: 4px;
+  font-size: 13px;
+}
+
+.summary span {
+  padding: 10px;
+  font-size: 13px;
+  color: #333;
+  display: block;
 }
 
 .sentiment {
@@ -104,7 +111,7 @@ li {
   font-size: 13px;
   color: black;
   border: white;
-  color: white;
+  color: grey;
   padding: 6px 20px;
   text-align: center;
   text-decoration: none;
@@ -117,14 +124,17 @@ li {
 
 .sentiment.positive {
   background-color: green;
+  color: white;
 }
 
 .sentiment.negative {
   background-color: red;
+  color: white;
 }
 
 .sentiment.neutral {
   background-color: grey;
+  color: white;
 }
 
 span.date {
