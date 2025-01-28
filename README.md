@@ -19,10 +19,9 @@ _A brief, engaging description of your project._
 
 ## **Overview**
 
-Describe the purpose of your project, its main objectives, and any context the user needs to understand its importance.
+This project is a Python-based **Smart Notes Organizer** that allows users to create, categorize, and search notes with AI-powered features like sentiment analysis and automatic categorization. It uses the OpenAI API for intelligent features, such as automatically proposing the category, creating the summary, and detecting the sentiment of the note.
 
-Example:  
-This project is a Python-based **Smart Notes Organizer** that allows users to create, categorize, and search notes with AI-powered features like sentiment analysis and automatic categorization.
+There is a clever search that runs through the `nlq_search` library, but currently, it doesn't always give relevant results, so it has to be investigated. The route with the query can be found in `app.py`, and the commented implementation is in the `index.html` template file.
 
 ---
 
@@ -54,8 +53,8 @@ This project is a Python-based **Smart Notes Organizer** that allows users to cr
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/username/repository-name.git
-   cd repository-name
+   git clone https://github.com/kosijer/ai-notes
+   cd ai-notes
    ```
 
 2. **Set up a virtual environment:**
@@ -70,11 +69,6 @@ This project is a Python-based **Smart Notes Organizer** that allows users to cr
 
    ```bash
    pip install -r requirements.txt
-   ```
-
-4. **Run the application:**
-   ```bash
-   python app.py
    ```
 
 ---
