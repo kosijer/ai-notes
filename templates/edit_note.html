@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Note</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Edit Note</h1>
+    <form action="{{ url_for('edit_note', note_id=note[0]) }}" method="post">
+      <input
+        type="text"
+        name="title"
+        value="{{ note[1] }}"
+        placeholder="Title"
+        required
+      />
+      <textarea name="content" placeholder="Content" required>
+{{ note[2] }}</textarea
+      >
+      <input
+        type="text"
+        name="category"
+        value="{{ note[3] }}"
+        placeholder="Category"
+        required
+      />
+      <!-- Hidden input to retain the original date -->
+      <input type="hidden" name="date" value="{{ note[4] }}" />
+      <input
+        type="text"
+        name="summary"
+        value="{{ note[6] }}"
+        placeholder="Summary"
+        required
+      />
+      <div class="button-container">
+        <a class="link" href="{{ url_for('index') }}">Cancel</a>
+        <button type="submit">Update Note</button>
+      </div>
+    </form>
+  </body>
+</html>

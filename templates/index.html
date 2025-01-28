@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Notes Organizer</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <script>
+      function updateSentimentStyle(sentiment) {
+        const sentimentDisplay = document.getElementById("sentiment-status");
+        sentimentDisplay.className = "sentiment"; // Reset class
+
+        switch (sentiment) {
+          case "positive":
+            sentimentDisplay.classList.add("positive");
+            break;
+          case "negative":
+            sentimentDisplay.classList.add("negative");
+            break;
+          case "neutral":
+            sentimentDisplay.classList.add("neutral");
+            break;
+          default:
+            sentimentDisplay.classList.add("unknown");
+        }
+      }
+
+      function toggleButtonState() {
+        const title = document
+          .querySelector('input[name="title"]')
+          .value.trim();
+        const content = document.getElementById("content").value.trim();
+        const category = document.getElementById("category").value.trim();
+        const buttons = document.querySelectorAll(".button-container button");
+
+        buttons.forEach((button) => {
+          button.disabled = !(title && content && category);
+        });
+      }
+
+      async function categorizeNote() {
+        const content = document.getElementById("content").value.trim();
+        if (content.length > 5) {
+          const response = await fetch("/categorize", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ content }),
+          });
+          const data = await response.json();
+          document.getElementById("category").value = data.category;
+        }
+      }
+
+      async function summarizeNote() {
+        const content = document.getElementById("content").value;
+        const response = await fetch("/summarize", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content }),
+        });
+        const data = await response.json();
+        document.getElementById("summary").innerText =
+          "Summary: " + data.summary;
+        document.querySelector('input[name="summary"]').value = data.summary;
+      }
+
+      async function analyzeSentiment() {
+        const content = document.getElementById("content").value;
+        const sentimentDisplay = document.getElementById("sentiment-status");
+
+        // Set loading status
+        sentimentDisplay.innerText = "Loading...";
+
+        try {
+          const response = await fetch("/sentiment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ content }),
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            sentimentDisplay.innerText = data.sentiment;
+            updateSentimentStyle(data.sentiment.toLowerCase());
+            document.querySelector('input[name="sentiment"]').value =
+              data.sentiment;
+          } else {
+            sentimentDisplay.innerText =
+              "Error: Unable to determine sentiment.";
+          }
+        } catch (error) {
+          sentimentDisplay.innerText = "Error: Unable to connect to server.";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .querySelector('input[name="title"]')
+          .addEventListener("input", toggleButtonState);
+        document
+          .getElementById("content")
+          .addEventListener("input", toggleButtonState);
+        document
+          .getElementById("category")
+          .addEventListener("input", toggleButtonState);
+        toggleButtonState(); // Initial check on page load
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Smart Notes Organizer</h1>
+    <form action="/add_note" method="post">
+      <input type="text" name="title" placeholder="Title" required />
+      <textarea
+        id="content"
+        name="content"
+        placeholder="Content"
+        required
+        onblur="categorizeNote()"
+      ></textarea>
+      <input
+        type="text"
+        id="category"
+        name="category"
+        placeholder="Category"
+        required
+      />
+      <input type="hidden" name="sentiment" value="" />
+      <input type="hidden" name="summary" value="" />
+      <div class="button-container">
+        <button class="link" type="button" onclick="summarizeNote()">
+          Summarize
+        </button>
+        <button class="link" type="button" onclick="analyzeSentiment()">
+          Analyze Sentiment
+        </button>
+        <div id="sentiment-status" class="sentiment"></div>
+        <button type="submit">Add Note</button>
+      </div>
+      <div id="summary" class="summary"></div>
+    </form>
+    <ul>
+      {% for note in notes %}
+      <li>
+        <div class="button-container">
+          <span class="category">{{ note[3] }}</span>
+          <span class="date">{{ note[4] }}</span>
+        </div>
+        <h2>{{ note[1] }}</h2>
+        <p>{{ note[2] }}</p>
+        {% if note[5] %} {% endif %} {% if note[6] %}
+        <p>Summary: {{ note[6] }}</p>
+        {% endif %}
+        <div class="button-container-right">
+          <div class="sentiment {{ note[5] | lower }}">{{ note[5] }}</div>
+          <a class="link" href="{{ url_for('edit_note', note_id=note[0]) }}"
+            >Edit</a
+          >
+          <a class="link" href="{{ url_for('delete_note', note_id=note[0]) }}"
+            >Delete</a
+          >
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
