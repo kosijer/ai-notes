@@ -5,6 +5,7 @@ from flask_cors import CORS
 from openai import OpenAI
 from dotenv import load_dotenv
 from datetime import datetime
+import dateparser
 
 # Load environment variables from .env file
 load_dotenv()
@@ -55,6 +56,37 @@ def index():
     notes = c.fetchall()
     conn.close()
     return render_template('index.html', notes=notes, query=query)
+
+@app.route('/nlq_search', methods=['POST'])
+def nlq_search():
+    query = request.form.get('query', '').strip()
+    date = dateparser.parse(query)
+    keywords = [word for word in query.split() if len(word) > 2]
+
+    conn = sqlite3.connect('notes.db')
+    c = conn.cursor()
+    sql_query = "SELECT * FROM notes WHERE"
+    conditions = []
+
+    if date:
+        conditions.append("date = ?")
+    if keywords:
+        keyword_conditions = " OR ".join(["title LIKE ? OR content LIKE ? OR category LIKE ? OR sentiment LIKE ? OR summary LIKE ?" for _ in keywords])
+        conditions.append(f"({keyword_conditions})")
+
+    if conditions:
+        sql_query += " AND ".join(conditions)
+    else:
+        sql_query = "SELECT * FROM notes"  # Fallback if no conditions
+
+    params = [date.strftime('%Y-%m-%d')] if date else []
+    for keyword in keywords:
+        params.extend([f"%{keyword}%"] * 5)
+
+    c.execute(sql_query, params)
+    results = c.fetchall()
+    conn.close()
+    return render_template('index.html', notes=results, query=query)
 
 
 @app.route('/add_note', methods=['POST'])
