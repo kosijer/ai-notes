@@ -23,6 +23,8 @@ This project is a Python-based **Smart Notes Organizer** that allows users to cr
 
 There is a clever search that runs through the `nlq_search` library, but currently, it doesn't always give relevant results, so it has to be investigated. The route with the query can be found in `app.py`, and the commented implementation is in the `index.html` template file.
 
+Not sure if `nlq_search` uses some of the AI services or it just had "smart" logic. I will try to do the research tomorrow and maybe try to utilitse OpenAI for that purpose.
+
 ---
 
 ## **Features**
