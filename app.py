@@ -143,6 +143,17 @@ def analyze_sentiment():
         return jsonify({'sentiment': sentiment})
     except Exception as e:
         return jsonify({'error': 'Failed to analyze sentiment'}), 500
+    
+
+
+@app.route('/view_note/<int:note_id>')
+def view_note(note_id):
+    conn = sqlite3.connect('notes.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM notes WHERE id = ?", (note_id,))
+    note = c.fetchone()
+    conn.close()
+    return render_template('view_note.html', note=note)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

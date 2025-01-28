@@ -10,7 +10,8 @@ h1 {
   text-align: center;
 }
 
-form {
+form,
+.full-details {
   max-width: 600px;
   margin: 20px auto;
   padding: 20px;
@@ -92,18 +93,24 @@ li {
   margin: 20px auto;
 }
 
-.summary {
+div.summary {
   margin-top: 10px;
   background-color: #e9ecef;
   border-radius: 4px;
   font-size: 13px;
 }
 
-.summary span {
+div.summary span {
   padding: 10px;
   font-size: 13px;
   color: #333;
   display: block;
+}
+
+p.summary {
+  padding: 10px 0;
+  font-size: 13px;
+  color: #777;
 }
 
 .sentiment {
@@ -117,7 +124,6 @@ li {
   text-decoration: none;
   display: inline-block;
   margin: 2px 2px;
-  cursor: pointer;
   border-radius: 16px;
   opacity: 0.5;
 }
@@ -147,4 +153,12 @@ span.category {
   color: #666;
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+.collapsed {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
